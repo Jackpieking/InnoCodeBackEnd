@@ -1,4 +1,6 @@
-﻿namespace InnoCode.Application.Share.Features;
+﻿using FastEndpoints;
 
-public interface IFeatureRequest<out TResponse>
+namespace InnoCode.Application.Share.Features;
+
+public interface IFeatureRequest<out TResponse> : ICommand<TResponse>
     where TResponse : class, IFeatureResponse { }

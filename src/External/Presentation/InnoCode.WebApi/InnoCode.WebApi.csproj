@@ -9,6 +9,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Infrastructure\Persistence\InnoCode.PostgresSql\InnoCode.PostgresSql.csproj" />
     <ProjectReference Include="..\..\Infrastructure\IdentityService\InnoCode.AppIdentityService\InnoCode.AppIdentityService.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Persistence\InnoCode.Redis\InnoCode.Redis.csproj" />
   </ItemGroup>
 
   <ItemGroup>

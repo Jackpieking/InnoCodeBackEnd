@@ -3,7 +3,9 @@ using InnoCode.Application.Share.Common;
 using InnoCode.Configuration.Infrastructure.Persistence.AspNetCoreIdentity;
 using InnoCode.Configuration.Infrastructure.Persistence.Database;
 using InnoCode.Domain.Entities;
+using InnoCode.Domain.UnitOfWorks.Main;
 using InnoCode.PostgresSql.Data;
+using InnoCode.PostgresSql.UnitOfWorks.Main;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -83,6 +85,8 @@ public static class PostgresSqlDependencyInjection
 
         #region CustomServices
         services.MakeScopedLazy<InnoCodeContext>();
+
+        services.AddScoped<IMainUnitOfWork, MainUnitOfWork>().MakeScopedLazy<IMainUnitOfWork>();
 
         // ====
         services.MakeScopedLazy<UserManager<UserEntity>>();

@@ -110,9 +110,6 @@ public static class WebApiDependencyInjection
         });
 
         // ====
-        services.AddDataProtection();
-
-        // ====
         services.AddLogging(config =>
         {
             config.ClearProviders();
