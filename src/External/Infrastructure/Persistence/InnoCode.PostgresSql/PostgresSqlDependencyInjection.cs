@@ -81,5 +81,8 @@ public static class PostgresSqlDependencyInjection
             .AddDefaultTokenProviders();
 
         return services;
+
+        #region CustomServices
+        #endregion
     }
 }
