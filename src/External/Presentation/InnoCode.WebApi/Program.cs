@@ -2,7 +2,9 @@ using System;
 using FastEndpoints;
 using FastEndpoints.Swagger;
 using InnoCode.AppIdentityService;
+using InnoCode.Application;
 using InnoCode.PostgresSql;
+using InnoCode.WebApi;
 using Microsoft.AspNetCore.Builder;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,8 +13,10 @@ var services = builder.Services;
 var configs = builder.Configuration;
 
 // Add services to the container.
+ApplicationDependencyInjection.Config(services, configs);
 PostgresSqlDependencyInjection.Config(services, configs);
 AppIdentityServiceDependencyInjection.Config(services, configs);
+WebApiDependencyInjection.Config(services, configs);
 
 var app = builder.Build();
 
@@ -20,7 +24,6 @@ var app = builder.Build();
 app.UseCors()
     .UseAuthentication()
     .UseAuthorization()
-    .UseSession()
     .UseResponseCaching()
     .UseFastEndpoints()
     .UseSwaggerGen()

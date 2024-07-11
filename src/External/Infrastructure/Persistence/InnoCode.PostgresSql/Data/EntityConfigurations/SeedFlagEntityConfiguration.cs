@@ -15,7 +15,9 @@ internal sealed class SeedFlagEntityConfiguration : IEntityTypeConfiguration<See
             table => table.HasComment("Contain seed flags")
         );
 
-        builder.HasKey(builder => builder.Id).HasName(MetaData.Property.Id.ColumnName);
+        builder.HasKey(builder => builder.Id);
+
+        builder.Property(entity => entity.Id).HasColumnName(MetaData.Property.Id.ColumnName);
     }
 
     internal static class MetaData

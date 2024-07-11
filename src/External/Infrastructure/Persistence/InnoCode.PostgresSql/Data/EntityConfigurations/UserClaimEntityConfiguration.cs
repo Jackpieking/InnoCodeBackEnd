@@ -9,11 +9,7 @@ internal sealed class UserClaimEntityConfiguration : IEntityTypeConfiguration<Us
 {
     public void Configure(EntityTypeBuilder<UserClaimEntity> builder)
     {
-        builder.ToTable(
-            MetaData.Table.TableName,
-            MetaData.Table.TableSchema,
-            table => table.HasComment("Contain user claims")
-        );
+        builder.ToTable(MetaData.Table.TableName, table => table.HasComment("Contain user claims"));
 
         builder
             .HasOne(userClaim => userClaim.User)
@@ -26,7 +22,7 @@ internal sealed class UserClaimEntityConfiguration : IEntityTypeConfiguration<Us
     {
         internal static class Table
         {
-            internal static readonly string TableName = "user_claim";
+            internal static readonly string TableName = "UserClaims";
 
             internal static readonly string TableSchema = CommonConstant.DatabaseSchemaName.DEFAULT;
         }

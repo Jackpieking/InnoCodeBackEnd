@@ -15,15 +15,16 @@ internal sealed class DictionaryEntityConfiguration : IEntityTypeConfiguration<D
             table => table.HasComment("Contain dictionaries")
         );
 
+        builder.HasKey(entity => entity.Key);
+
         builder
             .Property(entity => entity.Key)
             .HasColumnName(MetaData.Property.Key.ColumnName)
-            .HasColumnType(CommonConstant.DatabaseNativeType.TEXT)
-            .IsRequired(true);
+            .HasColumnType(CommonConstant.DatabaseNativeType.TEXT);
 
         builder
             .Property(entity => entity.Value)
-            .HasColumnName(MetaData.Property.Key.ColumnName)
+            .HasColumnName(MetaData.Property.Value.ColumnName)
             .HasColumnType(CommonConstant.DatabaseNativeType.JSONB)
             .IsRequired(true);
     }

@@ -9,11 +9,7 @@ internal sealed class UserRoleEntityConfiguration : IEntityTypeConfiguration<Use
 {
     public void Configure(EntityTypeBuilder<UserRoleEntity> builder)
     {
-        builder.ToTable(
-            MetaData.Table.TableName,
-            MetaData.Table.TableSchema,
-            table => table.HasComment("Contain user roles")
-        );
+        builder.ToTable(MetaData.Table.TableName, table => table.HasComment("Contain user roles"));
 
         builder
             .HasOne(userRole => userRole.User)
@@ -32,7 +28,7 @@ internal sealed class UserRoleEntityConfiguration : IEntityTypeConfiguration<Use
     {
         internal static class Table
         {
-            internal static readonly string TableName = "user_role";
+            internal static readonly string TableName = "UserRoles";
 
             internal static readonly string TableSchema = CommonConstant.DatabaseSchemaName.DEFAULT;
         }

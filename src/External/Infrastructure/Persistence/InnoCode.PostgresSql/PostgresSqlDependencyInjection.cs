@@ -1,4 +1,5 @@
 using System;
+using InnoCode.Application.Share.Common;
 using InnoCode.Configuration.Infrastructure.Persistence.AspNetCoreIdentity;
 using InnoCode.Configuration.Infrastructure.Persistence.Database;
 using InnoCode.Domain.Entities;
@@ -80,9 +81,19 @@ public static class PostgresSqlDependencyInjection
             .AddEntityFrameworkStores<InnoCodeContext>()
             .AddDefaultTokenProviders();
 
-        return services;
-
         #region CustomServices
+        services.MakeScopedLazy<InnoCodeContext>();
+
+        // ====
+        services.MakeScopedLazy<UserManager<UserEntity>>();
+
+        // ====
+        services.MakeScopedLazy<RoleManager<RoleEntity>>();
+
+        // ====
+        services.MakeScopedLazy<SignInManager<UserEntity>>();
         #endregion
+
+        return services;
     }
 }

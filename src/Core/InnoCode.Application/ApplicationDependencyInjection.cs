@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace InnoCode.Application;
 
-public static class ApplicationServiceConfig
+public static class ApplicationDependencyInjection
 {
     public static IServiceCollection Config(
         this IServiceCollection services,

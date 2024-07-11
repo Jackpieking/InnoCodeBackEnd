@@ -9,11 +9,7 @@ internal sealed class RoleClaimEntityConfiguration : IEntityTypeConfiguration<Ro
 {
     public void Configure(EntityTypeBuilder<RoleClaimEntity> builder)
     {
-        builder.ToTable(
-            MetaData.Table.TableName,
-            MetaData.Table.TableSchema,
-            table => table.HasComment("Contain role claims")
-        );
+        builder.ToTable(MetaData.Table.TableName, table => table.HasComment("Contain role claims"));
 
         builder
             .HasOne(roleClaim => roleClaim.Role)
@@ -26,7 +22,7 @@ internal sealed class RoleClaimEntityConfiguration : IEntityTypeConfiguration<Ro
     {
         internal static class Table
         {
-            internal static readonly string TableName = "role_claim";
+            internal static readonly string TableName = "RoleClaims";
 
             internal static readonly string TableSchema = CommonConstant.DatabaseSchemaName.DEFAULT;
         }

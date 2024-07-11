@@ -9,18 +9,14 @@ internal sealed class RoleEntityConfiguration : IEntityTypeConfiguration<RoleEnt
 {
     public void Configure(EntityTypeBuilder<RoleEntity> builder)
     {
-        builder.ToTable(
-            MetaData.Table.TableName,
-            MetaData.Table.TableSchema,
-            table => table.HasComment("Contain roles")
-        );
+        builder.ToTable(MetaData.Table.TableName, table => table.HasComment("Contain roles"));
     }
 
     internal static class MetaData
     {
         internal static class Table
         {
-            internal static readonly string TableName = "role";
+            internal static readonly string TableName = "Roles";
 
             internal static readonly string TableSchema = CommonConstant.DatabaseSchemaName.DEFAULT;
         }

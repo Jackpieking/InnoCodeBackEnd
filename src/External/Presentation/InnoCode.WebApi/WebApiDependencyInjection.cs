@@ -3,9 +3,12 @@ using System.Security.Cryptography;
 using System.Text;
 using FastEndpoints.Security;
 using FastEndpoints.Swagger;
+using InnoCode.Application.Share.Common;
+using InnoCode.Configuration.Infrastructure.Mail.GoogleGmail;
 using InnoCode.Configuration.Presentation.WebApi.Authentication;
 using InnoCode.Configuration.Presentation.WebApi.CORS;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -24,33 +27,33 @@ public static class WebApiDependencyInjection
     {
         // ====
         var authOption = configuration
-            .GetRequiredSection(key: "Authentication")
+            .GetRequiredSection("Authentication")
             .Get<JwtAuthenticationOption>();
 
+        TokenValidationParameters validationParameters =
+            new()
+            {
+                ValidateIssuer = authOption.Jwt.ValidateIssuer,
+                ValidateAudience = authOption.Jwt.ValidateAudience,
+                ValidateLifetime = authOption.Jwt.ValidateLifetime,
+                ValidateIssuerSigningKey = authOption.Jwt.ValidateIssuerSigningKey,
+                RequireExpirationTime = authOption.Jwt.RequireExpirationTime,
+                ValidTypes = authOption.Jwt.ValidTypes,
+                ValidIssuer = authOption.Jwt.ValidIssuer,
+                ValidAudience = authOption.Jwt.ValidAudience,
+                IssuerSigningKey = new SymmetricSecurityKey(
+                    new HMACSHA256(Encoding.UTF8.GetBytes(authOption.Jwt.IssuerSigningKey)).Key
+                )
+            };
+
         services.AddAuthenticationJwtBearer(
-            signingOptions: jwtSigningOption =>
+            jwtSigningOption =>
             {
                 jwtSigningOption.SigningKey = authOption.Jwt.IssuerSigningKey;
             },
-            bearerOptions: jwtBearerOption =>
+            jwtBearerOption =>
             {
-                jwtBearerOption.TokenValidationParameters = new()
-                {
-                    ValidateIssuer = authOption.Jwt.ValidateIssuer,
-                    ValidateAudience = authOption.Jwt.ValidateAudience,
-                    ValidateLifetime = authOption.Jwt.ValidateLifetime,
-                    ValidateIssuerSigningKey = authOption.Jwt.ValidateIssuerSigningKey,
-                    RequireExpirationTime = authOption.Jwt.RequireExpirationTime,
-                    ValidTypes = authOption.Jwt.ValidTypes,
-                    ValidIssuer = authOption.Jwt.ValidIssuer,
-                    ValidAudience = authOption.Jwt.ValidAudience,
-                    IssuerSigningKey = new SymmetricSecurityKey(
-                        key: new HMACSHA256(
-                            key: Encoding.UTF8.GetBytes(s: authOption.Jwt.IssuerSigningKey)
-                        ).Key
-                    )
-                };
-
+                jwtBearerOption.TokenValidationParameters = validationParameters;
                 jwtBearerOption.Validate();
             }
         );
@@ -64,9 +67,9 @@ public static class WebApiDependencyInjection
             .GetRequiredSection("Default")
             .Get<CORSOption>();
 
-        services.AddCors(setupAction: config =>
+        services.AddCors(config =>
         {
-            config.AddDefaultPolicy(configurePolicy: policy =>
+            config.AddDefaultPolicy(policy =>
             {
                 // Origins.
                 if (corsOption.Origins.Length == default)
@@ -75,7 +78,7 @@ public static class WebApiDependencyInjection
                 }
                 else
                 {
-                    policy = policy.WithOrigins(origins: corsOption.Origins);
+                    policy = policy.WithOrigins(corsOption.Origins);
                 }
 
                 // Headers.
@@ -85,7 +88,7 @@ public static class WebApiDependencyInjection
                 }
                 else
                 {
-                    policy = policy.WithHeaders(headers: corsOption.Headers);
+                    policy = policy.WithHeaders(corsOption.Headers);
                 }
 
                 // Methods
@@ -95,7 +98,7 @@ public static class WebApiDependencyInjection
                 }
                 else
                 {
-                    policy = policy.WithMethods(methods: corsOption.Methods);
+                    policy = policy.WithMethods(corsOption.Methods);
                 }
 
                 // Allow credentials.
@@ -110,7 +113,7 @@ public static class WebApiDependencyInjection
         services.AddDataProtection();
 
         // ====
-        services.AddLogging(configure: config =>
+        services.AddLogging(config =>
         {
             config.ClearProviders();
             config.AddConsole();
@@ -121,8 +124,8 @@ public static class WebApiDependencyInjection
 
         // ====
         var swaggerOption = configuration
-            .GetRequiredSection(key: "Swagger")
-            .GetRequiredSection(key: "NSwag")
+            .GetRequiredSection("Swagger")
+            .GetRequiredSection("NSwag")
             .Get<NSwagOption>();
 
         services.SwaggerDocument(documentOption =>
@@ -144,24 +147,24 @@ public static class WebApiDependencyInjection
                         License = new()
                         {
                             Name = swaggerOption.Doc.PostProcess.Info.License.Name,
-                            Url = new(value: swaggerOption.Doc.PostProcess.Info.License.Url)
+                            Url = new(swaggerOption.Doc.PostProcess.Info.License.Url)
                         }
                     };
                 };
 
                 setting.AddAuth(
-                    schemeName: JwtBearerDefaults.AuthenticationScheme,
-                    securityScheme: new()
+                    JwtBearerDefaults.AuthenticationScheme,
+                    new()
                     {
                         Type = (OpenApiSecuritySchemeType)
                             Enum.ToObject(
-                                enumType: typeof(OpenApiSecuritySchemeType),
-                                value: swaggerOption.Doc.Auth.Bearer.Type
+                                typeof(OpenApiSecuritySchemeType),
+                                swaggerOption.Doc.Auth.Bearer.Type
                             ),
                         In = (OpenApiSecurityApiKeyLocation)
                             Enum.ToObject(
-                                enumType: typeof(OpenApiSecurityApiKeyLocation),
-                                value: swaggerOption.Doc.Auth.Bearer.In
+                                typeof(OpenApiSecurityApiKeyLocation),
+                                swaggerOption.Doc.Auth.Bearer.In
                             ),
                         Scheme = swaggerOption.Doc.Auth.Bearer.Scheme,
                         BearerFormat = swaggerOption.Doc.Auth.Bearer.BearerFormat,
@@ -175,6 +178,32 @@ public static class WebApiDependencyInjection
 
         // ====
         services.AddHttpContextAccessor();
+
+        // ====
+        #region Configs
+        services
+            // ====
+            .AddSingleton(
+                configuration
+                    .GetRequiredSection("SmtpServer")
+                    .GetRequiredSection("GoogleGmail")
+                    .Get<GoogleSmtpServerOption>()
+            )
+            .MakeSingletonLazy<GoogleSmtpServerOption>();
+
+        // ====
+        services.AddSingleton(validationParameters).MakeSingletonLazy<TokenValidationParameters>();
+
+        // ====
+        services.AddSingleton(authOption).MakeSingletonLazy<JwtAuthenticationOption>();
+        #endregion
+
+        #region CustomServices
+        services.MakeSingletonLazy<IServiceScopeFactory>();
+
+        // ====
+        services.MakeSingletonLazy<IHttpContextAccessor>();
+        #endregion
 
         return services;
     }

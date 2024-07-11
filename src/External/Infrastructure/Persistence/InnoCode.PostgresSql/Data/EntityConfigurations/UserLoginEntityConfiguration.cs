@@ -9,11 +9,7 @@ internal sealed class UserLoginEntityConfiguration : IEntityTypeConfiguration<Us
 {
     public void Configure(EntityTypeBuilder<UserLoginEntity> builder)
     {
-        builder.ToTable(
-            MetaData.Table.TableName,
-            MetaData.Table.TableSchema,
-            table => table.HasComment("Contain user logins")
-        );
+        builder.ToTable(MetaData.Table.TableName, table => table.HasComment("Contain user logins"));
 
         builder
             .HasOne(userLogin => userLogin.User)
@@ -26,7 +22,7 @@ internal sealed class UserLoginEntityConfiguration : IEntityTypeConfiguration<Us
     {
         internal static class Table
         {
-            internal static readonly string TableName = "user_login";
+            internal static readonly string TableName = "UserLogins";
 
             internal static readonly string TableSchema = CommonConstant.DatabaseSchemaName.DEFAULT;
         }

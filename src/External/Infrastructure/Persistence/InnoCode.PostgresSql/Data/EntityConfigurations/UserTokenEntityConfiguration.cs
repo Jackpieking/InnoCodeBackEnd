@@ -11,7 +11,6 @@ internal sealed class UserTokenEntityConfiguration : IEntityTypeConfiguration<Us
     {
         builder.ToTable(
             MetaData.Table.TableName,
-            MetaData.Table.TableSchema,
             table => table.HasComment("Contain user tokens.")
         );
 
@@ -32,7 +31,7 @@ internal sealed class UserTokenEntityConfiguration : IEntityTypeConfiguration<Us
     {
         internal static class Table
         {
-            internal static readonly string TableName = "user_token";
+            internal static readonly string TableName = "UserTokens";
 
             internal static readonly string TableSchema = CommonConstant.DatabaseSchemaName.DEFAULT;
         }

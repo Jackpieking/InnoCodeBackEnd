@@ -16,7 +16,9 @@ internal sealed class AppExceptionLoggingEntityConfiguration
             table => table.HasComment("Contain app exception loggings")
         );
 
-        builder.HasKey(entity => entity.Id).HasName(MetaData.Property.Id.ColumnName);
+        builder.HasKey(entity => entity.Id);
+
+        builder.Property(entity => entity.Id).HasColumnName(MetaData.Property.Id.ColumnName);
 
         builder
             .Property(entity => entity.ErrorMessage)

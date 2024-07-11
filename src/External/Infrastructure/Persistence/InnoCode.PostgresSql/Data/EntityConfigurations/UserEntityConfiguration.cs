@@ -9,18 +9,14 @@ internal sealed class UserEntityConfiguration : IEntityTypeConfiguration<UserEnt
 {
     public void Configure(EntityTypeBuilder<UserEntity> builder)
     {
-        builder.ToTable(
-            MetaData.Table.TableName,
-            MetaData.Table.TableSchema,
-            table => table.HasComment("Contain users")
-        );
+        builder.ToTable(MetaData.Table.TableName, table => table.HasComment("Contain users"));
     }
 
     internal static class MetaData
     {
         internal static class Table
         {
-            internal static readonly string TableName = "user";
+            internal static readonly string TableName = "Users";
 
             internal static readonly string TableSchema = CommonConstant.DatabaseSchemaName.DEFAULT;
         }
