@@ -10,6 +10,4 @@ public interface IMainUnitOfWork
     Lazy<IRegisterRepository> RegisterRepository { get; }
 
     Lazy<ILogoutRepository> LogoutRepository { get; }
-
-    Lazy<IForgotPasswordRepository> ForgotPasswordRepository { get; }
 }

@@ -7,6 +7,7 @@ using InnoCode.Application;
 using InnoCode.Domain.Entities;
 using InnoCode.PostgresSql;
 using InnoCode.PostgresSql.Data;
+using InnoCode.Redis;
 using InnoCode.WebApi;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
@@ -23,6 +24,7 @@ ApplicationDependencyInjection.Config(services, configs);
 PostgresSqlDependencyInjection.Config(services, configs);
 AppIdentityServiceDependencyInjection.Config(services, configs);
 WebApiDependencyInjection.Config(services, configs);
+RedisDependencyInjection.Config(services, configs);
 
 var app = builder.Build();
 

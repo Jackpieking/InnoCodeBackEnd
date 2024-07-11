@@ -42,9 +42,4 @@ internal sealed class MainUnitOfWork : IMainUnitOfWork
     {
         get { return new(() => new LogoutRepository(_context)); }
     }
-
-    public Lazy<IForgotPasswordRepository> ForgotPasswordRepository
-    {
-        get { return new(() => new ForgotPasswordRepository(_context, _userManager)); }
-    }
 }

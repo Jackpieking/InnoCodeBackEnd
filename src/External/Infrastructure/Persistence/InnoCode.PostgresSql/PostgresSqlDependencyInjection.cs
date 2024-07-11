@@ -20,43 +20,37 @@ public static class PostgresSqlDependencyInjection
         IConfiguration configuration
     )
     {
-        services.AddDbContextPool<InnoCodeContext>(optionsAction: config =>
+        services.AddDbContextPool<InnoCodeContext>(config =>
         {
             var option = configuration
-                .GetRequiredSection(key: "Database")
-                .GetRequiredSection(key: "Relational")
-                .GetRequiredSection(key: "Main")
+                .GetRequiredSection("Database")
+                .GetRequiredSection("Relational")
+                .GetRequiredSection("Main")
                 .Get<InnoCodeDatabaseOption>();
 
             config
                 .UseNpgsql(
-                    connectionString: option.ConnectionString,
-                    npgsqlOptionsAction: npgsqlOptionsAction =>
+                    option.ConnectionString,
+                    npgsqlOptionsAction =>
                     {
                         npgsqlOptionsAction
-                            .CommandTimeout(commandTimeout: option.CommandTimeOut)
-                            .EnableRetryOnFailure(maxRetryCount: option.EnableRetryOnFailure)
-                            .MigrationsAssembly(
-                                assemblyName: typeof(InnoCodeContext).Assembly.FullName
-                            );
+                            .CommandTimeout(option.CommandTimeOut)
+                            .EnableRetryOnFailure(option.EnableRetryOnFailure)
+                            .MigrationsAssembly(typeof(InnoCodeContext).Assembly.FullName);
                     }
                 )
-                .EnableSensitiveDataLogging(
-                    sensitiveDataLoggingEnabled: option.EnableSensitiveDataLogging
-                )
-                .EnableDetailedErrors(detailedErrorsEnabled: option.EnableDetailedErrors)
-                .EnableThreadSafetyChecks(enableChecks: option.EnableThreadSafetyChecks)
-                .EnableServiceProviderCaching(
-                    cacheServiceProvider: option.EnableServiceProviderCaching
-                );
+                .EnableSensitiveDataLogging(option.EnableSensitiveDataLogging)
+                .EnableDetailedErrors(option.EnableDetailedErrors)
+                .EnableThreadSafetyChecks(option.EnableThreadSafetyChecks)
+                .EnableServiceProviderCaching(option.EnableServiceProviderCaching);
         });
 
         // ====
         services
-            .AddIdentity<UserEntity, RoleEntity>(setupAction: config =>
+            .AddIdentity<UserEntity, RoleEntity>(config =>
             {
                 var option = configuration
-                    .GetRequiredSection(key: "AspNetCoreIdentity")
+                    .GetRequiredSection("AspNetCoreIdentity")
                     .Get<AspNetCoreIdentityOption>();
 
                 config.Password.RequireDigit = option.Password.RequireDigit;
@@ -67,7 +61,7 @@ public static class PostgresSqlDependencyInjection
                 config.Password.RequiredUniqueChars = option.Password.RequiredUniqueChars;
 
                 config.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromSeconds(
-                    value: option.Lockout.DefaultLockoutTimeSpanInSecond
+                    option.Lockout.DefaultLockoutTimeSpanInSecond
                 );
                 config.Lockout.MaxFailedAccessAttempts = option.Lockout.MaxFailedAccessAttempts;
                 config.Lockout.AllowedForNewUsers = option.Lockout.AllowedForNewUsers;
