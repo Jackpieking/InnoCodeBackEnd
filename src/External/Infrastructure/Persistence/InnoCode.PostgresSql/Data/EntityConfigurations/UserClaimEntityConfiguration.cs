@@ -10,16 +10,16 @@ internal sealed class UserClaimEntityConfiguration : IEntityTypeConfiguration<Us
     public void Configure(EntityTypeBuilder<UserClaimEntity> builder)
     {
         builder.ToTable(
-            name: MetaData.Table.TableName,
-            schema: MetaData.Table.TableSchema,
-            buildAction: table => table.HasComment(comment: "Contain user claims.")
+            MetaData.Table.TableName,
+            MetaData.Table.TableSchema,
+            table => table.HasComment("Contain user claims")
         );
 
         builder
-            .HasOne(navigationExpression: userClaim => userClaim.User)
-            .WithMany(navigationExpression: user => user.UserClaims)
-            .HasForeignKey(foreignKeyExpression: userClaim => userClaim.UserId)
-            .OnDelete(deleteBehavior: DeleteBehavior.Cascade);
+            .HasOne(userClaim => userClaim.User)
+            .WithMany(user => user.UserClaims)
+            .HasForeignKey(userClaim => userClaim.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 
     internal static class MetaData

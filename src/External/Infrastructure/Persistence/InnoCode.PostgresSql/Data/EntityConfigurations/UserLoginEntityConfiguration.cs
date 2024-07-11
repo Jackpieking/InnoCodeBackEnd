@@ -10,16 +10,16 @@ internal sealed class UserLoginEntityConfiguration : IEntityTypeConfiguration<Us
     public void Configure(EntityTypeBuilder<UserLoginEntity> builder)
     {
         builder.ToTable(
-            name: MetaData.Table.TableName,
-            schema: MetaData.Table.TableSchema,
-            buildAction: table => table.HasComment(comment: "Contain user logins.")
+            MetaData.Table.TableName,
+            MetaData.Table.TableSchema,
+            table => table.HasComment("Contain user logins")
         );
 
         builder
-            .HasOne(navigationExpression: userLogin => userLogin.User)
-            .WithMany(navigationExpression: user => user.UserLogins)
-            .HasForeignKey(foreignKeyExpression: userLogin => userLogin.UserId)
-            .OnDelete(deleteBehavior: DeleteBehavior.Cascade);
+            .HasOne(userLogin => userLogin.User)
+            .WithMany(user => user.UserLogins)
+            .HasForeignKey(userLogin => userLogin.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 
     internal static class MetaData

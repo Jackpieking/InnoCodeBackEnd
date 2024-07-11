@@ -10,9 +10,9 @@ internal sealed class RoleEntityConfiguration : IEntityTypeConfiguration<RoleEnt
     public void Configure(EntityTypeBuilder<RoleEntity> builder)
     {
         builder.ToTable(
-            name: MetaData.Table.TableName,
-            schema: MetaData.Table.TableSchema,
-            buildAction: table => table.HasComment(comment: "Contain role claims.")
+            MetaData.Table.TableName,
+            MetaData.Table.TableSchema,
+            table => table.HasComment("Contain roles")
         );
     }
 

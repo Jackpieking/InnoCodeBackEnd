@@ -10,9 +10,9 @@ internal sealed class UserEntityConfiguration : IEntityTypeConfiguration<UserEnt
     public void Configure(EntityTypeBuilder<UserEntity> builder)
     {
         builder.ToTable(
-            name: MetaData.Table.TableName,
-            schema: MetaData.Table.TableSchema,
-            buildAction: table => table.HasComment(comment: "Contain users.")
+            MetaData.Table.TableName,
+            MetaData.Table.TableSchema,
+            table => table.HasComment("Contain users")
         );
     }
 

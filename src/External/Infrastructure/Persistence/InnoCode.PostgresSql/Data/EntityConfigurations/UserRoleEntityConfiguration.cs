@@ -10,22 +10,22 @@ internal sealed class UserRoleEntityConfiguration : IEntityTypeConfiguration<Use
     public void Configure(EntityTypeBuilder<UserRoleEntity> builder)
     {
         builder.ToTable(
-            name: MetaData.Table.TableName,
-            schema: MetaData.Table.TableSchema,
-            buildAction: table => table.HasComment(comment: "Contain user roles.")
+            MetaData.Table.TableName,
+            MetaData.Table.TableSchema,
+            table => table.HasComment("Contain user roles")
         );
 
         builder
-            .HasOne(navigationExpression: userRole => userRole.User)
-            .WithMany(navigationExpression: user => user.UserRoles)
-            .HasForeignKey(foreignKeyExpression: userRole => userRole.UserId)
-            .OnDelete(deleteBehavior: DeleteBehavior.Cascade);
+            .HasOne(userRole => userRole.User)
+            .WithMany(user => user.UserRoles)
+            .HasForeignKey(userRole => userRole.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder
-            .HasOne(navigationExpression: userRole => userRole.Role)
-            .WithMany(navigationExpression: role => role.UserRoles)
-            .HasForeignKey(foreignKeyExpression: userRole => userRole.RoleId)
-            .OnDelete(deleteBehavior: DeleteBehavior.Cascade);
+            .HasOne(userRole => userRole.Role)
+            .WithMany(role => role.UserRoles)
+            .HasForeignKey(userRole => userRole.RoleId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 
     internal static class MetaData

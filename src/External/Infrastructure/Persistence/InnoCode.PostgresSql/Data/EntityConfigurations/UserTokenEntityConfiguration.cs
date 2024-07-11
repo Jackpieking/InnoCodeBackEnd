@@ -10,22 +10,22 @@ internal sealed class UserTokenEntityConfiguration : IEntityTypeConfiguration<Us
     public void Configure(EntityTypeBuilder<UserTokenEntity> builder)
     {
         builder.ToTable(
-            name: MetaData.Table.TableName,
-            schema: MetaData.Table.TableSchema,
-            buildAction: table => table.HasComment(comment: "Contain user tokens.")
+            MetaData.Table.TableName,
+            MetaData.Table.TableSchema,
+            table => table.HasComment("Contain user tokens.")
         );
 
         builder
-            .Property(propertyExpression: builder => builder.ExpiredAt)
-            .HasColumnType(typeName: CommonConstant.DatabaseNativeType.TIMESTAMPTZ)
-            .HasColumnName(name: MetaData.Property.ExpiredAt.ColumnName)
-            .IsRequired(required: true);
+            .Property(builder => builder.ExpiredAt)
+            .HasColumnType(CommonConstant.DatabaseNativeType.TIMESTAMPTZ)
+            .HasColumnName(MetaData.Property.ExpiredAt.ColumnName)
+            .IsRequired(true);
 
         builder
-            .HasOne(navigationExpression: userToken => userToken.User)
-            .WithMany(navigationExpression: user => user.UserTokens)
-            .HasForeignKey(foreignKeyExpression: userToken => userToken.UserId)
-            .OnDelete(deleteBehavior: DeleteBehavior.Cascade);
+            .HasOne(userToken => userToken.User)
+            .WithMany(user => user.UserTokens)
+            .HasForeignKey(userToken => userToken.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 
     internal static class MetaData

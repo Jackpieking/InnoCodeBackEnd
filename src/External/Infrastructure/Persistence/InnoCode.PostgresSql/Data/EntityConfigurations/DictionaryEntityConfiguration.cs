@@ -10,22 +10,22 @@ internal sealed class DictionaryEntityConfiguration : IEntityTypeConfiguration<D
     public void Configure(EntityTypeBuilder<DictionaryEntity> builder)
     {
         builder.ToTable(
-            name: MetaData.Table.TableName,
-            schema: MetaData.Table.TableSchema,
-            buildAction: table => table.HasComment(comment: "Contain dictionaries.")
+            MetaData.Table.TableName,
+            MetaData.Table.TableSchema,
+            table => table.HasComment("Contain dictionaries")
         );
 
         builder
-            .Property(propertyExpression: entity => entity.Key)
-            .HasColumnName(name: MetaData.Property.Key.ColumnName)
-            .HasColumnType(typeName: CommonConstant.DatabaseNativeType.TEXT)
-            .IsRequired(required: true);
+            .Property(entity => entity.Key)
+            .HasColumnName(MetaData.Property.Key.ColumnName)
+            .HasColumnType(CommonConstant.DatabaseNativeType.TEXT)
+            .IsRequired(true);
 
         builder
-            .Property(propertyExpression: entity => entity.Value)
-            .HasColumnName(name: MetaData.Property.Key.ColumnName)
-            .HasColumnType(typeName: CommonConstant.DatabaseNativeType.JSONB)
-            .IsRequired(required: true);
+            .Property(entity => entity.Value)
+            .HasColumnName(MetaData.Property.Key.ColumnName)
+            .HasColumnType(CommonConstant.DatabaseNativeType.JSONB)
+            .IsRequired(true);
     }
 
     internal static class MetaData

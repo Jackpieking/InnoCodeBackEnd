@@ -10,14 +10,12 @@ internal sealed class SeedFlagEntityConfiguration : IEntityTypeConfiguration<See
     public void Configure(EntityTypeBuilder<SeedFlagEntity> builder)
     {
         builder.ToTable(
-            name: MetaData.Table.TableName,
-            schema: MetaData.Table.TableSchema,
-            buildAction: table => table.HasComment(comment: "Contain seed flags.")
+            MetaData.Table.TableName,
+            MetaData.Table.TableSchema,
+            table => table.HasComment("Contain seed flags")
         );
 
-        builder
-            .HasKey(keyExpression: builder => builder.Id)
-            .HasName(name: MetaData.Property.Id.ColumnName);
+        builder.HasKey(builder => builder.Id).HasName(MetaData.Property.Id.ColumnName);
     }
 
     internal static class MetaData

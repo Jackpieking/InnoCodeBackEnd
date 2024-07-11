@@ -11,38 +11,36 @@ internal sealed class AppExceptionLoggingEntityConfiguration
     public void Configure(EntityTypeBuilder<AppExceptionLoggingEntity> builder)
     {
         builder.ToTable(
-            name: MetaData.Table.TableName,
-            schema: MetaData.Table.TableSchema,
-            buildAction: table => table.HasComment(comment: "Contain app exception loggings.")
+            MetaData.Table.TableName,
+            MetaData.Table.TableSchema,
+            table => table.HasComment("Contain app exception loggings")
         );
 
-        builder
-            .HasKey(keyExpression: entity => entity.Id)
-            .HasName(name: MetaData.Property.Id.ColumnName);
+        builder.HasKey(entity => entity.Id).HasName(MetaData.Property.Id.ColumnName);
 
         builder
-            .Property(propertyExpression: entity => entity.ErrorMessage)
-            .HasColumnName(name: MetaData.Property.ErrorMessage.ColumnName)
-            .HasColumnType(typeName: CommonConstant.DatabaseNativeType.TEXT)
-            .IsRequired(required: true);
+            .Property(entity => entity.ErrorMessage)
+            .HasColumnName(MetaData.Property.ErrorMessage.ColumnName)
+            .HasColumnType(CommonConstant.DatabaseNativeType.TEXT)
+            .IsRequired(true);
 
         builder
-            .Property(propertyExpression: entity => entity.ErrorStackTrace)
-            .HasColumnName(name: MetaData.Property.ErrorStackTrace.ColumnName)
-            .HasColumnType(typeName: CommonConstant.DatabaseNativeType.TEXT)
-            .IsRequired(required: true);
+            .Property(entity => entity.ErrorStackTrace)
+            .HasColumnName(MetaData.Property.ErrorStackTrace.ColumnName)
+            .HasColumnType(CommonConstant.DatabaseNativeType.TEXT)
+            .IsRequired(true);
 
         builder
-            .Property(propertyExpression: entity => entity.CreatedAt)
-            .HasColumnName(name: MetaData.Property.CreatedAt.ColumnName)
-            .HasColumnType(typeName: CommonConstant.DatabaseNativeType.TEXT)
-            .IsRequired(required: true);
+            .Property(entity => entity.CreatedAt)
+            .HasColumnName(MetaData.Property.CreatedAt.ColumnName)
+            .HasColumnType(CommonConstant.DatabaseNativeType.TEXT)
+            .IsRequired(true);
 
         builder
-            .Property(propertyExpression: entity => entity.Data)
-            .HasColumnName(name: MetaData.Property.Data.ColumnName)
-            .HasColumnType(typeName: CommonConstant.DatabaseNativeType.TEXT)
-            .IsRequired(required: true);
+            .Property(entity => entity.Data)
+            .HasColumnName(MetaData.Property.Data.ColumnName)
+            .HasColumnType(CommonConstant.DatabaseNativeType.TEXT)
+            .IsRequired(true);
     }
 
     internal static class MetaData
